@@ -32,15 +32,13 @@ class MainActivity : AppCompatActivity() {
         adapter.setOnItemClickListener(object : GifsAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
                 val intent = Intent(this@MainActivity, SecondActivity::class.java)
-
-                intent.putExtra("url", gifs[position].images.ogImage.url)
+                intent.putExtra("url", gifs[position].images?.ogImage?.url)
                 startActivity(intent)
-
             }
-
         })
 
-        val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -50,14 +48,15 @@ class MainActivity : AppCompatActivity() {
                 val body = response.body()
                 if(body==null){
                     Log.d(TAG, "onResponse: No response...")
+                    return
                 }
 
-                gifs.addAll(body!!.res)
+                gifs.addAll(body.res)
                 adapter.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<DataResult?>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }

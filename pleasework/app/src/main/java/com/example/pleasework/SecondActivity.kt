@@ -14,7 +14,7 @@ class SecondActivity : AppCompatActivity() {
 
         val imageView = findViewById<ImageView>(R.id.imageView)
 
-        val url = intent.getStringArrayExtra("url")
+        val url = intent.getStringExtra("url")
 
         Glide.with(this).load(url).into(imageView)
     }
